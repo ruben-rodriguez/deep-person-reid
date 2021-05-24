@@ -6,13 +6,20 @@ Reference:
     - Zhou et al. Omni-Scale Feature Learning for Person Re-Identification. ICCV, 2019.
 """
 import numpy as np
+import os, inspect, sys
 import os.path as osp
 import argparse
 import cv2
 import torch
 from torch.nn import functional as F
 
+# Torchereid import from folder above (not a package)
+current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parent_dir = os.path.dirname(current_dir)
+sys.path.insert(0, parent_dir) 
+
 import torchreid
+
 from torchreid.utils import (
     check_isfile, mkdir_if_missing, load_pretrained_weights
 )
