@@ -1,4 +1,4 @@
-import os, sys, inspect
+import os, sys, inspect, argparse
 
 # Torchereid import from folder above (not a package)
 current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
@@ -6,6 +6,12 @@ parent_dir = os.path.dirname(current_dir)
 sys.path.insert(0, parent_dir) 
 
 import torchreid
+
+parser = argparse.ArgumentParser()
+parser.add_argument("model")
+args = parser.parse_args()
+
+model_name = args.model
 
 datamanager = torchreid.data.ImageDataManager(
     root='reid-data',
@@ -20,7 +26,7 @@ datamanager = torchreid.data.ImageDataManager(
 
 
 model = torchreid.models.build_model(
-    name='resnet50',
+    name=model_name,
     num_classes=datamanager.num_train_pids,
     loss='softmax',
     pretrained=True
@@ -49,7 +55,7 @@ engine = torchreid.engine.ImageSoftmaxEngine(
 )
 
 engine.run(
-    save_dir='log/resnet50',
+    save_dir='log/' + model_name,
     max_epoch=60,
     eval_freq=10,
     print_freq=10,
